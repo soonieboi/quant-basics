@@ -66,7 +66,3 @@ Core libraries used by the app:
 - `anthropic`
 
 Market data is loaded live from Yahoo Finance through `yfinance`.
-
-## Cleanup note
-
-Older one-off scripts were removed in favor of the consolidated Streamlit app. `dashboard.py` is the only maintained app entrypoint.

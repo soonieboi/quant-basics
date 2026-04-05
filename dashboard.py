@@ -208,6 +208,60 @@ hr { border-color: #1e2030 !important; }
     max-width: 920px;
     margin-bottom: 1rem;
 }
+.bottom-nav {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 0.9rem;
+    align-items: center;
+    background: #0d0d14;
+    border: 1px solid #1e2030;
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    margin-top: 1rem;
+}
+.bottom-nav-meta {
+    text-align: center;
+}
+.bottom-nav-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #3a4050;
+    margin-bottom: 0.2rem;
+}
+.bottom-nav-page {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #8a9ab0;
+    line-height: 1.5;
+}
+.bottom-nav-link {
+    display: block;
+    text-decoration: none !important;
+    border: 1px solid #2a2d3a;
+    border-radius: 4px;
+    padding: 0.75rem 0.85rem;
+    background: #11131b;
+    color: #c8cdd6 !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.bottom-nav-link:hover {
+    border-color: #4a5060;
+    background: #141826;
+    transform: translateY(-1px);
+}
+.bottom-nav-link.prev { text-align: left; }
+.bottom-nav-link.next { text-align: right; }
+.bottom-nav-link.disabled {
+    color: #3a4050 !important;
+    background: #0f1118;
+    border-color: #1a1d28;
+    pointer-events: none;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -327,6 +381,7 @@ CURRICULUM_ORDER = [
     "Phase 11 — Statistical Rigor",
     "Phase 12 — Market Microstructure",
     "◆ Quant Algo Families",
+    "◇ About the Writer",
 ]
 
 
@@ -340,34 +395,29 @@ def render_bottom_nav(current_page: str):
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<hr>", unsafe_allow_html=True)
-    left, center, right = st.columns([1.2, 2.2, 1.2])
+    prev_label = "← Home" if prev_page == "▲  Home" else (f"← {prev_page.split(' — ', 1)[-1]}" if prev_page else "")
+    if next_page == "◆ Quant Algo Families":
+        next_label = "Atlas →"
+    elif next_page == "◇ About the Writer":
+        next_label = "About →"
+    else:
+        next_label = f"{next_page.split(' — ', 1)[-1]} →" if next_page else ""
 
-    with left:
-        if prev_page:
-            prev_label = "← Home" if prev_page == "▲  Home" else f"← {prev_page.split(' — ', 1)[-1]}"
-            if st.button(prev_label, key=f"nav_prev_{idx}", use_container_width=True):
-                st.query_params["page"] = prev_page
-                st.rerun()
+    prev_href = f"?page={quote(prev_page)}" if prev_page else "#"
+    next_href = f"?page={quote(next_page)}" if next_page else "#"
+    prev_class = "bottom-nav-link prev" + ("" if prev_page else " disabled")
+    next_class = "bottom-nav-link next" + ("" if next_page else " disabled")
 
-    with center:
-        st.markdown(f"""
-<div style='text-align:center;padding-top:0.45rem;'>
-    <div style='font-family:JetBrains Mono;font-size:0.6rem;letter-spacing:0.18em;
-                text-transform:uppercase;color:#3a4050;margin-bottom:0.2rem;'>
-        Navigation
+    st.markdown(f"""
+<div class='bottom-nav'>
+    <a class='{prev_class}' href='{prev_href}'>{prev_label or "&nbsp;"}</a>
+    <div class='bottom-nav-meta'>
+        <div class='bottom-nav-kicker'>Navigation</div>
+        <div class='bottom-nav-page'>{current_page}</div>
     </div>
-    <div style='font-family:JetBrains Mono;font-size:0.72rem;color:#4a5060;line-height:1.6;'>
-        {current_page}
-    </div>
+    <a class='{next_class}' href='{next_href}'>{next_label or "&nbsp;"}</a>
 </div>
 """, unsafe_allow_html=True)
-
-    with right:
-        if next_page:
-            next_label = "Atlas →" if next_page == "◆ Quant Algo Families" else f"{next_page.split(' — ', 1)[-1]} →"
-            if st.button(next_label, key=f"nav_next_{idx}", use_container_width=True):
-                st.query_params["page"] = next_page
-                st.rerun()
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -377,12 +427,15 @@ _all_pages = ["▲  Home","Phase 1 — Asset Metrics","Phase 2 — SMA Crossover
               "Phase 7 — Position Sizing","Phase 8 — Portfolio Construction",
               "Phase 9 — Risk Management","Phase 10 — Factor Models",
               "Phase 11 — Statistical Rigor","Phase 12 — Market Microstructure",
-              "◆ Quant Algo Families"]
+              "◆ Quant Algo Families","◇ About the Writer"]
 _qp_page = st.query_params.get("page", "▲  Home")
 if _qp_page not in _all_pages:
     _qp_page = "▲  Home"
-if st.session_state.get("page") != _qp_page:
+if "page" not in st.session_state:
     st.session_state["page"] = _qp_page
+elif st.session_state.get("_last_query_page") != _qp_page:
+    st.session_state["page"] = _qp_page
+st.session_state["_last_query_page"] = _qp_page
 if "anthropic_api_key" not in st.session_state:
     st.session_state["anthropic_api_key"] = ""
 
@@ -395,6 +448,7 @@ with st.sidebar:
     page = st.radio("Navigation", _all_pages, index=_default_idx,
                     key="page", label_visibility="collapsed")
     st.query_params["page"] = page
+    st.session_state["_last_query_page"] = page
 
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<p class='section-label'>Benchmark to beat</p>", unsafe_allow_html=True)
@@ -468,7 +522,7 @@ PAGES = ["▲  Home","Phase 1 — Asset Metrics","Phase 2 — SMA Crossover",
          "Phase 7 — Position Sizing","Phase 8 — Portfolio Construction",
          "Phase 9 — Risk Management","Phase 10 — Factor Models",
          "Phase 11 — Statistical Rigor","Phase 12 — Market Microstructure",
-         "◆ Quant Algo Families"]
+         "◆ Quant Algo Families","◇ About the Writer"]
 if page not in PAGES:
     page = "▲  Home"
     st.session_state["page"] = page
@@ -596,14 +650,8 @@ if page == "▲  Home":
         },
     ]
 
-    TAG_COLORS = {
-        "FOUNDATIONS": "#f5c518",
-        "STRATEGY":    "#00ff88",
-        "BACKTESTING": "#ff7043",
-        "EXECUTION":   "#ffca28",
-        "PORTFOLIO":   "#00b4ff",
-        "ADVANCED":    "#b48ead",
-    }
+    HOME_PHASE_ACCENT = "#f5c518"
+    HOME_ATLAS_ACCENT = "#26c6da"
 
     # Phase → nav page name mapping
     PHASE_NAV = {
@@ -619,7 +667,6 @@ if page == "▲  Home":
     for row_start in range(0, len(PHASES), 3):
         cols = st.columns(3)
         for col, phase in zip(cols, PHASES[row_start:row_start+3]):
-            tag_color = TAG_COLORS.get(phase["tag"], "#5a6070")
             concepts_html = "".join(
                 f"<span style='display:inline-block;font-size:0.6rem;padding:1px 7px;"
                 f"border:1px solid #1e2030;border-radius:2px;color:#4a5060;"
@@ -631,12 +678,12 @@ if page == "▲  Home":
                 nav_href = f"?page={quote(nav_target)}"
                 st.markdown(f"""
 <a class='phase-card-link' href='{nav_href}'>
-<div class='phase-card' style='border-top-color:{phase["badge"]};'>
+<div class='phase-card' style='border-top-color:{HOME_PHASE_ACCENT};'>
     <div style='display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem;'>
         <span style='font-family:JetBrains Mono;font-size:1.4rem;font-weight:700;
-                     color:{phase["badge"]};line-height:1;'>{phase["num"]}</span>
+                     color:{HOME_PHASE_ACCENT};line-height:1;'>{phase["num"]}</span>
         <span style='font-family:JetBrains Mono;font-size:0.55rem;letter-spacing:0.2em;
-                     text-transform:uppercase;color:{tag_color};background:{tag_color}18;
+                     text-transform:uppercase;color:#8a9ab0;background:#1a1d28;
                      padding:2px 8px;border-radius:2px;'>{phase["tag"]}</span>
     </div>
     <div style='font-family:JetBrains Mono;font-size:0.95rem;font-weight:600;
@@ -648,7 +695,7 @@ if page == "▲  Home":
         {phase["desc"]}
     </div>
     <div>{concepts_html}</div>
-    <div style='font-family:JetBrains Mono;font-size:0.66rem;color:{phase["badge"]};
+    <div style='font-family:JetBrains Mono;font-size:0.66rem;color:{HOME_PHASE_ACCENT};
                 margin-top:0.9rem;letter-spacing:0.08em;text-transform:uppercase;'>
         Open Phase {phase["num"]} →
     </div>
@@ -705,21 +752,21 @@ if page == "▲  Home":
 <div>
 """, unsafe_allow_html=True)
     algo_cards = [
-        ("Trend-Following", "#00ff88", "Ride persistent moves. SMA crossovers, breakout systems, time-series momentum."),
-        ("Mean Reversion", "#00b4ff", "Bet that stretched prices snap back. RSI, z-score bands, pairs reversion."),
-        ("Cross-Sectional Momentum", "#f5c518", "Rank assets and own the relative winners while avoiding laggards."),
-        ("Stat Arb", "#ff4466", "Exploit short-lived pricing dislocations across related instruments or baskets."),
-        ("Factor Investing", "#76ff03", "Systematically target exposures like value, momentum, quality, and size."),
-        ("Market Making", "#ff7043", "Quote both sides of the market and earn spread while controlling inventory risk."),
-        ("Volatility / Options", "#b48ead", "Trade implied vs realized vol, skew, convexity, and hedging dynamics."),
-        ("ML / Forecasting", "#4fc3f7", "Use features and models to predict returns, risk, or execution quality."),
+        ("Trend-Following", "Ride persistent moves. SMA crossovers, breakout systems, time-series momentum."),
+        ("Mean Reversion", "Bet that stretched prices snap back. RSI, z-score bands, pairs reversion."),
+        ("Cross-Sectional Momentum", "Rank assets and own the relative winners while avoiding laggards."),
+        ("Stat Arb", "Exploit short-lived pricing dislocations across related instruments or baskets."),
+        ("Factor Investing", "Systematically target exposures like value, momentum, quality, and size."),
+        ("Market Making", "Quote both sides of the market and earn spread while controlling inventory risk."),
+        ("Volatility / Options", "Trade implied vs realized vol, skew, convexity, and hedging dynamics."),
+        ("ML / Forecasting", "Use features and models to predict returns, risk, or execution quality."),
     ]
     for row_start in range(0, len(algo_cards), 2):
         cols = st.columns(2)
-        for col, (title, color, desc) in zip(cols, algo_cards[row_start:row_start+2]):
+        for col, (title, desc) in zip(cols, algo_cards[row_start:row_start+2]):
             with col:
                 st.markdown(f"""
-<div style='background:#0d0d14;border:1px solid #1e2030;border-left:3px solid {color};
+<div style='background:#0d0d14;border:1px solid #1e2030;border-left:3px solid {HOME_ATLAS_ACCENT};
             border-radius:4px;padding:1rem 1.1rem;margin-bottom:0.85rem;'>
     <div style='font-family:JetBrains Mono;font-size:0.85rem;font-weight:600;
                 color:#c8cdd6;margin-bottom:0.45rem;'>
@@ -743,7 +790,34 @@ if page == "▲  Home":
     </div>
 </div>
 """, unsafe_allow_html=True)
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #1e2030;border-left:3px solid #8a9ab0;
+            border-radius:4px;padding:0.95rem 1.1rem;margin-bottom:0.8rem;max-width:920px;'>
+    <div style='font-family:JetBrains Mono;font-size:0.7rem;line-height:1.8;color:#4a5060;'>
+        <span style='display:block;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:#3a4050;margin-bottom:0.35rem;'>
+            About
+        </span>
+        Open <span style='color:#c8cdd6;'>◇ About the Writer</span> from the sidebar for author notes,
+        intent behind the project, and future direction.
+    </div>
+</div>
+""", unsafe_allow_html=True)
     st.markdown("</div></div>", unsafe_allow_html=True)
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #2a2230;border-top:2px solid #d7a6ff;
+            border-radius:4px;padding:1rem 1.1rem;margin:1rem 0 0.8rem 0;'>
+    <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
+                text-transform:uppercase;color:#5a4f66;margin-bottom:0.45rem;'>
+        Disclaimer
+    </div>
+    <div style='font-family:JetBrains Mono;font-size:0.7rem;line-height:1.9;color:#6f667a;'>
+        Quant Basics is for learning purposes only. I am not a financial professional,
+        and nothing in this app should be treated as financial advice, investment advice,
+        or a recommendation to trade any asset. Use the material here as educational
+        content only, and take all results with a pinch of salt.
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
     st.markdown("""
 <div style='font-family:JetBrains Mono;font-size:0.65rem;color:#2a2d3a;
@@ -3296,3 +3370,88 @@ If you can't answer those, you don't yet understand the strategy well enough to 
     </div>
     """, unsafe_allow_html=True)
     render_bottom_nav("◆ Quant Algo Families")
+
+
+# ════════════════════════════════════════════════════════════════════════════
+#  ABOUT THE WRITER
+# ════════════════════════════════════════════════════════════════════════════
+elif page == "◇ About the Writer":
+
+    st.markdown("<span class='phase-badge' style='background:#8a9ab0;color:#0a0a0f'>About</span>", unsafe_allow_html=True)
+    st.markdown("## About the Writer")
+    st.markdown("<p class='section-label'>Project intent · beliefs · contact</p>", unsafe_allow_html=True)
+
+    st.markdown("""
+<div class='explainer-box' style='border-left-color:#8a9ab0;'>
+<h4 style='color:#c8cdd6 !important;'>A practical quant learning lab</h4>
+
+I built Quant Basics to make systematic trading easier to learn in a hands-on way.
+Instead of treating quant as a wall of jargon, I wanted one place where I could
+start from data, build rules, test ideas honestly, understand risk, and then think
+about execution.
+
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #1e2030;border-top:2px solid #8a9ab0;
+            border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
+    <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
+                text-transform:uppercase;color:#3a4050;margin-bottom:0.45rem;'>
+        Core Beliefs
+    </div>
+    <div style='font-family:JetBrains Mono;font-size:0.72rem;line-height:1.95;color:#4a5060;'>
+        Honest backtests beat impressive-looking curves.<br>
+        Simple systems understood deeply beat complex systems copied blindly.<br>
+        Risk management, costs, and execution matter as much as signal ideas.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #1e2030;border-top:2px solid #8a9ab0;
+            border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
+    <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
+                text-transform:uppercase;color:#3a4050;margin-bottom:0.45rem;'>
+        What This Project Emphasizes
+    </div>
+    <div style='font-family:JetBrains Mono;font-size:0.72rem;line-height:1.95;color:#4a5060;'>
+        Technical-first learning for people who want to understand markets through systems.<br>
+        Honest treatment of costs, walk-forward testing, drawdowns, statistical rigor, and microstructure.<br>
+        Beginner-friendly explanations that focus on intuition, not finance gatekeeping.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #1e2030;border-top:2px solid #8a9ab0;
+            border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
+    <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
+                text-transform:uppercase;color:#3a4050;margin-bottom:0.45rem;'>
+        Contact
+    </div>
+    <div style='font-family:JetBrains Mono;font-size:0.72rem;line-height:1.95;color:#4a5060;'>
+        Instagram: @sherminh<br>
+        Email: sherminh0512@gmail.com<br>
+        GitHub: @soonieboi
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div style='background:#0d0d14;border:1px solid #2a2230;border-top:2px solid #d7a6ff;
+            border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
+    <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
+                text-transform:uppercase;color:#5a4f66;margin-bottom:0.45rem;'>
+        Disclaimer
+    </div>
+    <div style='font-family:JetBrains Mono;font-size:0.72rem;line-height:1.95;color:#6f667a;'>
+        This project is for learning purposes only. I am not a financial professional,
+        and nothing here should be treated as financial advice, investment advice, or a
+        recommendation to trade any asset. Everything in this app should be taken with a
+        pinch of salt and used as educational material only.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+    render_bottom_nav("◇ About the Writer")
