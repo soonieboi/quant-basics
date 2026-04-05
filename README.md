@@ -58,6 +58,25 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+## Deploy on Railway
+
+This repo is set up for Railway with [railway.toml](/Users/sherms/quant_basics/railway.toml).
+
+Recommended first deploy flow:
+
+1. Push the repo to GitHub.
+2. In Railway, create a new project and choose `Deploy from GitHub repo`.
+3. Select this repository.
+4. Railway should detect Python automatically and use the start command from `railway.toml`.
+5. After the first deploy finishes, open the generated Railway domain and verify the app loads.
+
+Notes:
+
+- The app listens on `0.0.0.0` and uses Railway's injected `PORT`.
+- Healthcheck is set to `/`.
+- If you want AI captions enabled in production, add `ANTHROPIC_API_KEY` in the Railway service variables.
+- For now, deploy manually from GitHub integration first. Add GitHub Actions deploy automation only after the first Railway deploy is stable.
+
 ## Product structure
 
 The home page is intentionally split into three bands:
