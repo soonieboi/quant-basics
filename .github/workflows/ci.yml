@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compile Python modules
+        run: |
+          python -m py_compile \
+            dashboard.py \
+            content/config.py \
+            core/ai.py \
+            core/data.py \
+            core/metrics.py \
+            core/strategies.py \
+            ui/components.py \
+            ui/styles.py \
+            pages/home.py \
+            pages/phases.py \
+            pages/reference.py \
+            pages/phase_01_asset_metrics.py \
+            pages/phase_02_sma_crossover.py \
+            pages/phase_03_rsi_mean_reversion.py \
+            pages/phase_04_transaction_costs.py \
+            pages/phase_05_combining_signals.py \
+            pages/phase_06_walk_forward_validation.py \
+            pages/phase_07_position_sizing.py \
+            pages/phase_08_portfolio_construction.py \
+            pages/phase_09_risk_management.py \
+            pages/phase_10_factor_models.py \
+            pages/phase_11_statistical_rigor.py \
+            pages/phase_12_market_microstructure.py
+
+      - name: Import smoke check
+        run: |
+          python - <<'PY'
+          import content.config
+          import core.ai
+          import core.data
+          import core.metrics
+          import core.strategies
+          import ui.components
+          import ui.styles
+          import pages.home
+          import pages.phases
+          import pages.reference
+          print("import smoke check passed")
+          PY
+

@@ -47,6 +47,17 @@ If `streamlit` is not on your shell path, use:
 
 The app will usually open at `http://localhost:8501` unless that port is already in use.
 
+## Install dependencies
+
+If you need to recreate the environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
 ## Product structure
 
 The home page is intentionally split into three bands:
@@ -86,3 +97,14 @@ Core libraries used by the app:
 - `anthropic`
 
 Market data is loaded live from Yahoo Finance through `yfinance`.
+
+## CI / CD
+
+The repo now includes GitHub Actions workflows in `.github/workflows/`:
+
+- `ci.yml`
+  - installs dependencies from `requirements.txt`
+  - runs `py_compile` across the app modules
+  - runs a lightweight import smoke check
+- `dependency-review.yml`
+  - runs on pull requests to flag risky dependency changes
