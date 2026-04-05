@@ -4,7 +4,11 @@ Interactive Streamlit curriculum for learning quant trading from first principle
 
 ## What this repo contains
 
-- `dashboard.py`: the main Streamlit app
+- `dashboard.py`: Streamlit entrypoint, sidebar, routing
+- `pages/`: page render modules
+- `core/`: quant/data logic
+- `ui/`: styles and reusable UI helpers
+- `content/`: shared metadata and config
 - `README.md`: project overview and run instructions
 - `SKILL.md`: repo-local maintenance notes for future edits
 
@@ -17,7 +21,19 @@ The app currently includes:
 
 ## Run locally
 
-Activate the virtualenv if needed, then run:
+From the repo root:
+
+```bash
+cd /Users/sherms/quant_basics
+```
+
+If you are using the local virtualenv, activate it first:
+
+```bash
+source venv/bin/activate
+```
+
+Then start the app:
 
 ```bash
 streamlit run dashboard.py
@@ -28,6 +44,8 @@ If `streamlit` is not on your shell path, use:
 ```bash
 ./venv/bin/streamlit run dashboard.py
 ```
+
+The app will usually open at `http://localhost:8501` unless that port is already in use.
 
 ## Product structure
 
@@ -45,10 +63,12 @@ The numbered phases are the curriculum. The atlas page is reference material, no
 - Preserve the current page model:
   - numbered phases are sequential learning modules
   - `◆ Quant Algo Families` remains separate from the numbered curriculum
-- Use the shared helpers near the top of `dashboard.py` for:
-  - chart captions
-  - bottom navigation
-  - signal / metrics utilities
+- Keep responsibility split by folder:
+  - `dashboard.py` for app boot and route dispatch
+  - `pages/` for page bodies
+  - `ui/` for CSS and reusable render helpers
+  - `core/` for strategies, metrics, data, and AI helpers
+  - `content/` for shared metadata/constants
 - When changing navigation, keep sidebar, home cards, query-param routing, and bottom nav in sync.
 - When changing Plotly layouts, avoid passing duplicate `xaxis` / `yaxis` keys together with `PLOTLY_THEME`.
 
