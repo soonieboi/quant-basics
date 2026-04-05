@@ -195,7 +195,7 @@ def render_phase_11(START, END, selected_tickers, api_key):
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"""
         <div style='font-family:JetBrains Mono;font-size:0.7rem;color:#3a4050;line-height:2;
-                    border-left:2px solid #1e2030;padding-left:1rem;'>
+                    border-left:2px solid var(--qb-border);padding-left:1rem;'>
         bootstrap samples: {int(n_boot):,} · 95% CI: [{ci_low_b:.2f}, {ci_high_b:.2f}]<br>
         analytical CI (assumes normality): [{ci_low_a:.2f}, {ci_high_a:.2f}]<br>
         P(Sharpe &gt; 0): {p_positive:.1%} · min backtest for {n_trials_grid} trials: {min_years:.1f} years
@@ -207,5 +207,4 @@ def render_phase_11(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 12 — MARKET MICROSTRUCTURE
     # ════════════════════════════════════════════════════════════════════════════
-
 

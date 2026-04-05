@@ -137,7 +137,7 @@ def render_phase_8(START, END, selected_tickers, api_key):
         fig_corr = go.Figure(go.Heatmap(
             z=corr_mat.values,
             x=short_labels, y=short_labels,
-            colorscale=[[0, "#ff4466"], [0.5, "#161820"], [1, "#00ff88"]],
+            colorscale=[[0, "#ff4466"], [0.5, "var(--qb-surface-alt)"], [1, "#00ff88"]],
             zmin=-1, zmax=1,
             text=[[f"{v:.2f}" for v in row] for row in corr_mat.values],
             texttemplate="%{text}",
@@ -145,8 +145,8 @@ def render_phase_8(START, END, selected_tickers, api_key):
             colorbar=dict(tickfont=dict(family="JetBrains Mono", size=10)),
         ))
         fig_corr.update_layout(**PLOTLY_THEME, height=max(300, n_assets * 45))
-        fig_corr.update_xaxes(gridcolor="#161820")
-        fig_corr.update_yaxes(gridcolor="#161820")
+        fig_corr.update_xaxes(gridcolor="var(--qb-border)")
+        fig_corr.update_yaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig_corr, width="stretch")
         chart_caption(ai_insight(
             f"Correlation matrix for portfolio construction using {', '.join(short_labels)}. "
@@ -160,7 +160,7 @@ def render_phase_8(START, END, selected_tickers, api_key):
         fig_ef = go.Figure()
         fig_ef.add_trace(go.Scatter(
             x=sim_vol, y=sim_ret, mode="markers",
-            marker=dict(color=sim_sharpe, colorscale=[[0,"#ff4466"],[0.5,"#2a2d3a"],[1,"#00ff88"]],
+            marker=dict(color=sim_sharpe, colorscale=[[0,"#ff4466"],[0.5,"var(--qb-surface-alt)"],[1,"#00ff88"]],
                         size=3, opacity=0.6,
                         colorbar=dict(title="Sharpe", tickfont=dict(family="JetBrains Mono", size=9))),
             hovertemplate="Vol: %{x:.2%}  Ret: %{y:.2%}<extra></extra>",
@@ -182,9 +182,9 @@ def render_phase_8(START, END, selected_tickers, api_key):
                 x=[float(np.sqrt(cov_mat.values[i,i]))],
                 y=[float(mu_vec.iloc[i])],
                 mode="markers+text", name=lbl.replace("-USD",""),
-                marker=dict(color=TICKER_OPTIONS.get(lbl, "#5a6070"), size=8, symbol="x"),
+                marker=dict(color=TICKER_OPTIONS.get(lbl, "var(--qb-muted)"), size=8, symbol="x"),
                 text=[lbl.replace("-USD","")], textposition="top right",
-                textfont=dict(family="JetBrains Mono", size=8, color="#5a6070")))
+                textfont=dict(family="JetBrains Mono", size=8, color="var(--qb-muted)")))
         fig_ef.update_layout(**PLOTLY_THEME, height=440,
                              legend=dict(orientation="h", y=1.05, x=0, font=dict(size=9), bgcolor="rgba(0,0,0,0)"),
                              xaxis_title="Annualised Volatility", yaxis_title="Annualised Return")
@@ -210,7 +210,7 @@ def render_phase_8(START, END, selected_tickers, api_key):
         fig_w.update_layout(**PLOTLY_THEME, height=320, barmode="group",
                             legend=dict(orientation="h", y=1.05, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                             yaxis_title="Weight")
-        fig_w.update_yaxes(tickformat=".0%", gridcolor="#161820")
+        fig_w.update_yaxes(tickformat=".0%", gridcolor="var(--qb-border)")
         st.plotly_chart(fig_w, width="stretch")
         chart_caption(ai_insight(
             f"Portfolio weights for max Sharpe, min volatility, and equal weight portfolios across {', '.join(short_labels)}. "
@@ -234,5 +234,3 @@ def render_phase_8(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 9 — RISK MANAGEMENT
     # ════════════════════════════════════════════════════════════════════════════
-
-

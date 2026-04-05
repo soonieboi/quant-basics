@@ -165,7 +165,7 @@ def render_phase_1(START, END, selected_tickers, api_key):
         fig2.update_layout(**PLOTLY_THEME, height=260,
                            legend=dict(orientation="h", y=1.08, x=0, font=dict(size=10)),
                            hovermode="x unified")
-        fig2.update_yaxes(tickformat=".0%", zeroline=True, zerolinecolor="#2a2d3a")
+        fig2.update_yaxes(tickformat=".0%", zeroline=True, zerolinecolor="var(--qb-border-strong)")
         st.plotly_chart(fig2, width="stretch")
         worst_dd = min(rows, key=lambda r: r["Max Drawdown"])
         chart_caption(ai_insight(
@@ -182,5 +182,4 @@ def render_phase_1(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 2 — SMA CROSSOVER
     # ════════════════════════════════════════════════════════════════════════════
-
 

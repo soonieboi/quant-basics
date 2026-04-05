@@ -23,15 +23,15 @@ def render_home_page():
     st.markdown("""
 <div style='padding: 2rem 0 1rem 0;'>
     <div style='font-family: JetBrains Mono; font-size: 0.65rem; letter-spacing: 0.3em;
-                text-transform: uppercase; color: #3a4050; margin-bottom: 0.5rem;'>
+                text-transform: uppercase; color: var(--qb-kicker); margin-bottom: 0.5rem;'>
         Quant Basics — Interactive Curriculum
     </div>
     <div style='font-family: JetBrains Mono; font-size: 2.8rem; font-weight: 700;
-                color: #e8ecf0; line-height: 1.1; letter-spacing: -0.03em;'>
+                color: var(--qb-text-strong); line-height: 1.1; letter-spacing: -0.03em;'>
         Learn Quant Trading<br>
         <span style='color: #00ff88;'>from Scratch.</span>
     </div>
-    <div style='font-family: JetBrains Mono; font-size: 0.85rem; color: #4a5060;
+    <div style='font-family: JetBrains Mono; font-size: 0.95rem; color: var(--qb-muted);
                 margin-top: 1rem; line-height: 1.8; max-width: 620px;'>
         12 hands-on modules plus a quant strategy atlas. Real data. Live charts.
         Every concept explained
@@ -40,13 +40,13 @@ def render_home_page():
 </div>
 """, unsafe_allow_html=True)
     st.markdown("""
-<div style='background:#0d0d14;border:1px solid #1e2030;border-left:3px solid #00ff88;
+<div style='background:var(--qb-surface);border:1px solid var(--qb-border);border-left:3px solid #00ff88;
             border-radius:4px;padding:1rem 1.1rem;margin:0.3rem 0 1.2rem 0;max-width:920px;'>
     <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
-                text-transform:uppercase;color:#3a4050;margin-bottom:0.5rem;'>
+                text-transform:uppercase;color:var(--qb-kicker);margin-bottom:0.5rem;'>
         Start Here
     </div>
-    <div style='font-family:JetBrains Mono;font-size:0.76rem;line-height:1.8;color:#4a5060;'>
+    <div style='font-family:JetBrains Mono;font-size:0.84rem;line-height:1.8;color:var(--qb-muted);'>
         The numbered phases are the learning path. The separate quant strategy atlas is reference material
         you can open anytime when you want a broader map of the field.
     </div>
@@ -104,7 +104,7 @@ def render_home_page():
     )
     render_panel(
         "About",
-        "Open <span style='color:#c8cdd6;'>◇ About the Writer</span> from the sidebar for author notes, intent behind the project, and contact details.",
+        "Open <span style='color:var(--qb-text);'>◇ About the Writer</span> from the sidebar for author notes, intent behind the project, and contact details.",
         ABOUT_ACCENT,
         accent_position="left",
         margin="0 0 0.8rem 0",
@@ -118,7 +118,7 @@ def render_home_page():
     )
 
     st.markdown("""
-<div style='font-family:JetBrains Mono;font-size:0.65rem;color:#2a2d3a;
+<div style='font-family:JetBrains Mono;font-size:0.72rem;color:var(--qb-kicker);
             text-align:center;padding:1rem 0 0.5rem 0;line-height:2;'>
     All computations run live on real market data via yfinance &nbsp;·&nbsp;
     Select any phase in the sidebar to begin &nbsp;·&nbsp;
@@ -126,4 +126,3 @@ def render_home_page():
 </div>
 """, unsafe_allow_html=True)
     render_bottom_nav("▲  Home")
-

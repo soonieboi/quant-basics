@@ -128,7 +128,7 @@ def render_phase_12(START, END, selected_tickers, api_key):
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
                             row_heights=[0.5, 0.5], vertical_spacing=0.04)
         fig.add_trace(go.Scatter(x=prices.index, y=prices.values,
-            line=dict(color="#c8cdd6", width=1), name="Price",
+            line=dict(color="var(--qb-text)", width=1), name="Price",
             hovertemplate="$%{y:.2f}<extra></extra>"), row=1, col=1)
         fig.add_trace(go.Scatter(x=sim_spread.index, y=sim_spread.values,
             fill="tozeroy", fillcolor="rgba(245,197,24,0.1)",
@@ -136,9 +136,9 @@ def render_phase_12(START, END, selected_tickers, api_key):
             hovertemplate="%{y:.1f} bps<extra></extra>"), row=2, col=1)
         fig.update_layout(**PLOTLY_THEME, height=400, hovermode="x unified",
                           legend=dict(orientation="h", y=1.02, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"))
-        fig.update_yaxes(gridcolor="#161820", title_text="Price", row=1)
-        fig.update_yaxes(gridcolor="#161820", title_text="Spread (bps)", row=2)
-        fig.update_xaxes(gridcolor="#161820")
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Price", row=1)
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Spread (bps)", row=2)
+        fig.update_xaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig, width="stretch")
         chart_caption(ai_insight(
             f"Microstructure spread proxy for {ms_ticker}. "
@@ -154,15 +154,15 @@ def render_phase_12(START, END, selected_tickers, api_key):
         fig_ac = go.Figure(go.Bar(x=list(lags), y=autocorrs, marker_color=colors_ac,
                                   text=[f"{a:.3f}" for a in autocorrs], textposition="outside",
                                   hovertemplate="Lag %{x}: %{y:.3f}<extra></extra>"))
-        fig_ac.add_hline(y=0, line=dict(color="#2a2d3a", width=1))
+        fig_ac.add_hline(y=0, line=dict(color="var(--qb-border-strong)", width=1))
         # 95% significance bands: ±1.96/√T
         sig_band = 1.96 / np.sqrt(len(log_ret))
-        fig_ac.add_hline(y=sig_band,  line=dict(color="#5a6070", dash="dot", width=0.8),
-                         annotation_text="95% significance", annotation_font=dict(color="#5a6070", size=9))
-        fig_ac.add_hline(y=-sig_band, line=dict(color="#5a6070", dash="dot", width=0.8))
+        fig_ac.add_hline(y=sig_band,  line=dict(color="var(--qb-muted)", dash="dot", width=0.8),
+                         annotation_text="95% significance", annotation_font=dict(color="var(--qb-muted)", size=9))
+        fig_ac.add_hline(y=-sig_band, line=dict(color="var(--qb-muted)", dash="dot", width=0.8))
         fig_ac.update_layout(**PLOTLY_THEME, height=300, showlegend=False,
                              xaxis_title="Lag (days)", yaxis_title="Autocorrelation")
-        fig_ac.update_yaxes(gridcolor="#161820")
+        fig_ac.update_yaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig_ac, width="stretch")
         chart_caption(ai_insight(
             f"Return autocorrelation for {ms_ticker} across lags 1 to 20. "
@@ -181,10 +181,10 @@ def render_phase_12(START, END, selected_tickers, api_key):
                                        text=[f"{v:.1%}" for v in dow_returns.values],
                                        textposition="outside",
                                        hovertemplate="%{x}: %{y:.2%}<extra></extra>"))
-            fig_dow.add_hline(y=0, line=dict(color="#2a2d3a", width=0.8))
+            fig_dow.add_hline(y=0, line=dict(color="var(--qb-border-strong)", width=0.8))
             fig_dow.update_layout(**PLOTLY_THEME, height=280, showlegend=False,
                                   yaxis_title="Ann. avg return")
-            fig_dow.update_yaxes(tickformat=".0%", gridcolor="#161820")
+            fig_dow.update_yaxes(tickformat=".0%", gridcolor="var(--qb-border)")
             st.plotly_chart(fig_dow, width="stretch")
             best_dow = dow_returns.idxmax()
             chart_caption(ai_insight(
@@ -201,10 +201,10 @@ def render_phase_12(START, END, selected_tickers, api_key):
                                        text=[f"{v:.1%}" for v in monthly_ret.values],
                                        textposition="outside",
                                        hovertemplate="%{x}: %{y:.2%}<extra></extra>"))
-            fig_mon.add_hline(y=0, line=dict(color="#2a2d3a", width=0.8))
+            fig_mon.add_hline(y=0, line=dict(color="var(--qb-border-strong)", width=0.8))
             fig_mon.update_layout(**PLOTLY_THEME, height=280, showlegend=False,
                                   yaxis_title="Ann. avg return")
-            fig_mon.update_yaxes(tickformat=".0%", gridcolor="#161820")
+            fig_mon.update_yaxes(tickformat=".0%", gridcolor="var(--qb-border)")
             st.plotly_chart(fig_mon, width="stretch")
             best_month = monthly_ret.idxmax()
             chart_caption(ai_insight(
@@ -217,7 +217,7 @@ def render_phase_12(START, END, selected_tickers, api_key):
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("""
         <div style='font-family:JetBrains Mono;font-size:0.7rem;color:#3a4050;line-height:2;
-                    border-left:2px solid #1e2030;padding-left:1rem;'>
+                    border-left:2px solid var(--qb-border);padding-left:1rem;'>
         spread model: proportional to 21-day rolling vol (simplified market maker model)<br>
         autocorrelation: bars outside ±grey bands are statistically significant at 95%<br>
         seasonality: annualised average returns — small sample, treat as exploratory only
@@ -229,4 +229,3 @@ def render_phase_12(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  QUANT ALGO FAMILIES
     # ════════════════════════════════════════════════════════════════════════════
-

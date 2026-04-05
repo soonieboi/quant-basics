@@ -118,7 +118,7 @@ def render_phase_2(START, END, selected_tickers, api_key):
                             subplot_titles=("", "", ""))
     
         fig.add_trace(go.Scatter(x=prices.index, y=prices.values, name="SPY",
-            line=dict(color="#c8cdd6", width=1),
+            line=dict(color="var(--qb-text)", width=1),
             hovertemplate="%{x|%Y-%m-%d}  $%{y:.2f}<extra></extra>"), row=1, col=1)
         fig.add_trace(go.Scatter(x=sma_fast.index, y=sma_fast.values, name=f"SMA {fast_window}",
             line=dict(color="#00b4ff", width=1.2, dash="dot"),
@@ -134,7 +134,7 @@ def render_phase_2(START, END, selected_tickers, api_key):
             line=dict(width=0), showlegend=False, hoverinfo="skip"), row=1, col=1)
     
         fig.add_trace(go.Scatter(x=m_bh["cumulative"].index, y=m_bh["cumulative"].values,
-            name="Buy & Hold", line=dict(color="#5a6070", width=1.2),
+            name="Buy & Hold", line=dict(color="var(--qb-muted)", width=1.2),
             hovertemplate="B&H: $%{y:.3f}<extra></extra>"), row=2, col=1)
         fig.add_trace(go.Scatter(x=m_strat["cumulative"].index, y=m_strat["cumulative"].values,
             name="Strategy", line=dict(color="#00ff88", width=1.5),
@@ -148,10 +148,10 @@ def render_phase_2(START, END, selected_tickers, api_key):
         fig.update_layout(**PLOTLY_THEME, height=620,
                           legend=dict(orientation="h", y=1.02, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                           hovermode="x unified")
-        fig.update_yaxes(gridcolor="#161820", row=1)
-        fig.update_yaxes(gridcolor="#161820", row=2, title_text="Growth $1")
-        fig.update_yaxes(gridcolor="#161820", tickvals=[0, 1], ticktext=["Flat", "Long"], row=3)
-        fig.update_xaxes(gridcolor="#161820")
+        fig.update_yaxes(gridcolor="var(--qb-border)", row=1)
+        fig.update_yaxes(gridcolor="var(--qb-border)", row=2, title_text="Growth $1")
+        fig.update_yaxes(gridcolor="var(--qb-border)", tickvals=[0, 1], ticktext=["Flat", "Long"], row=3)
+        fig.update_xaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig, width="stretch")
         chart_caption(ai_insight(
             f"SMA {fast_window}/{slow_window} crossover on {strat_ticker}. "
@@ -185,7 +185,7 @@ def render_phase_2(START, END, selected_tickers, api_key):
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"""
         <div style='font-family:JetBrains Mono;font-size:0.7rem;color:#3a4050;line-height:2;
-                    border-left:2px solid #1e2030;padding-left:1rem;'>
+                    border-left:2px solid var(--qb-border);padding-left:1rem;'>
         signal: long when SMA{fast_window} &gt; SMA{slow_window} · shifted +1 bar (no look-ahead bias)<br>
         trades: {num_trades} · days invested: {days_long}/{total_days} ({days_long/total_days:.0%})<br>
         no transaction costs · no slippage · cash earns 0%
@@ -197,5 +197,3 @@ def render_phase_2(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 3 — RSI MEAN REVERSION
     # ════════════════════════════════════════════════════════════════════════════
-
-

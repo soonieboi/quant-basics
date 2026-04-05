@@ -150,7 +150,7 @@ def render_phase_9(START, END, selected_tickers, api_key):
         fig2.add_trace(go.Scatter(x=roll_vol.index, y=roll_vol.values,
             line=dict(color="#00b4ff", width=1), name="21d Rolling Vol",
             hovertemplate="Vol: %{y:.2%}<extra></extra>"), row=2, col=1)
-        fig2.add_hline(y=long_vol, line=dict(color="#5a6070", dash="dot", width=1), row=2, col=1)
+        fig2.add_hline(y=long_vol, line=dict(color="var(--qb-muted)", dash="dot", width=1), row=2, col=1)
         fig2.add_hline(y=1.5*long_vol, line=dict(color="#ff4466", dash="dot", width=1), row=2, col=1,
                        annotation_text="High-vol threshold", annotation_font=dict(color="#ff4466", size=9))
     
@@ -165,9 +165,9 @@ def render_phase_9(START, END, selected_tickers, api_key):
         fig2.update_layout(**PLOTLY_THEME, height=440,
                            legend=dict(orientation="h", y=1.02, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                            hovermode="x unified")
-        fig2.update_yaxes(tickformat=".0%", gridcolor="#161820", row=1)
-        fig2.update_yaxes(tickformat=".0%", gridcolor="#161820", title_text="Ann. Vol", row=2)
-        fig2.update_xaxes(gridcolor="#161820")
+        fig2.update_yaxes(tickformat=".0%", gridcolor="var(--qb-border)", row=1)
+        fig2.update_yaxes(tickformat=".0%", gridcolor="var(--qb-border)", title_text="Ann. Vol", row=2)
+        fig2.update_xaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig2, width="stretch")
         chart_caption(ai_insight(
             f"Drawdown and volatility regime for {rm_ticker}. "
@@ -195,5 +195,3 @@ def render_phase_9(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 10 — FACTOR MODELS
     # ════════════════════════════════════════════════════════════════════════════
-
-

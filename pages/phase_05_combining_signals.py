@@ -128,7 +128,7 @@ def render_phase_5(START, END, selected_tickers, api_key):
     
         # ── Equity curves ─────────────────────────────────────────────────────────
         st.markdown("<p class='section-label'>Equity curves — all five strategies</p>", unsafe_allow_html=True)
-        palette = {"B&H": "#5a6070", "SMA": "#00ff88", "RSI": "#00b4ff",
+        palette = {"B&H": "var(--qb-muted)", "SMA": "#00ff88", "RSI": "#00b4ff",
                    "AND": "#f5c518", "OR": "#ff4466", "AVG": "#b48ead"}
         fig = go.Figure()
         for name, m in [("B&H", m_bh), ("SMA", m_sma), ("RSI", m_rsi),
@@ -164,8 +164,8 @@ def render_phase_5(START, END, selected_tickers, api_key):
         fig2.add_trace(go.Bar(x=names, y=dds, marker_color=clrs,
                               text=[f"{d:.1%}" for d in dds], textposition="outside"), row=1, col=2)
         fig2.update_layout(**PLOTLY_THEME, height=340, showlegend=False)
-        fig2.update_yaxes(gridcolor="#161820", row=1, col=1)
-        fig2.update_yaxes(gridcolor="#161820", tickformat=".0%", row=1, col=2)
+        fig2.update_yaxes(gridcolor="var(--qb-border)", row=1, col=1)
+        fig2.update_yaxes(gridcolor="var(--qb-border)", tickformat=".0%", row=1, col=2)
         st.plotly_chart(fig2, width="stretch")
         chart_caption(ai_insight(
             f"Sharpe and max drawdown comparison for combined signals on {comb_ticker}. "
@@ -195,5 +195,3 @@ def render_phase_5(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 6 — WALK-FORWARD VALIDATION
     # ════════════════════════════════════════════════════════════════════════════
-
-

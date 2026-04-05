@@ -97,7 +97,7 @@ def render_phase_7(START, END, selected_tickers, api_key):
             fractions = [0.25, 0.5, 1.0, min(kelly_f * 0.5, 3.0), min(kelly_f, 4.0)]
             frac_labels = ["25%", "50%", "Full (1×)",
                            f"½ Kelly ({kelly_f*0.5:.2f}×)", f"Full Kelly ({kelly_f:.2f}×)"]
-            colors_ps = ["#3a4050", "#5a6070", "#c8cdd6", "#00ff88", "#f5c518"]
+            colors_ps = ["var(--qb-disabled)", "var(--qb-muted)", "var(--qb-text)", "#00ff88", "#f5c518"]
     
             curves = {}
             metrics_ps = {}
@@ -145,9 +145,9 @@ def render_phase_7(START, END, selected_tickers, api_key):
         fig2.add_trace(go.Bar(x=lbls, y=[metrics_ps[l]["max_dd"] for l in lbls], marker_color=clrs,
                               text=[f"{metrics_ps[l]['max_dd']:.1%}" for l in lbls], textposition="outside"), row=1, col=3)
         fig2.update_layout(**PLOTLY_THEME, height=320, showlegend=False)
-        fig2.update_yaxes(gridcolor="#161820", tickformat=".0%", row=1, col=1)
-        fig2.update_yaxes(gridcolor="#161820", row=1, col=2)
-        fig2.update_yaxes(gridcolor="#161820", tickformat=".0%", row=1, col=3)
+        fig2.update_yaxes(gridcolor="var(--qb-border)", tickformat=".0%", row=1, col=1)
+        fig2.update_yaxes(gridcolor="var(--qb-border)", row=1, col=2)
+        fig2.update_yaxes(gridcolor="var(--qb-border)", tickformat=".0%", row=1, col=3)
         st.plotly_chart(fig2, width="stretch")
         chart_caption(ai_insight(
             f"Return-risk tradeoff by position size on {ps_ticker} using {strategy_choice}. "
@@ -170,5 +170,3 @@ def render_phase_7(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 8 — PORTFOLIO CONSTRUCTION
     # ════════════════════════════════════════════════════════════════════════════
-
-

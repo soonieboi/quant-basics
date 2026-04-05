@@ -135,8 +135,8 @@ def render_phase_10(START, END, selected_tickers, api_key):
         y_line = alpha_daily + beta_full * x_line
         fig_sc.add_trace(go.Scatter(x=x_line, y=y_line, mode="lines",
             line=dict(color="#f5c518", width=1.5), name=f"β={beta_full:.2f} fit"))
-        fig_sc.add_vline(x=0, line=dict(color="#2a2d3a", width=0.8))
-        fig_sc.add_hline(y=0, line=dict(color="#2a2d3a", width=0.8))
+        fig_sc.add_vline(x=0, line=dict(color="var(--qb-border-strong)", width=0.8))
+        fig_sc.add_hline(y=0, line=dict(color="var(--qb-border-strong)", width=0.8))
         fig_sc.update_layout(**PLOTLY_THEME, height=360,
                              xaxis_title=f"{benchmark} daily return",
                              yaxis_title=f"{fm_ticker.replace('-USD','')} daily return",
@@ -158,7 +158,7 @@ def render_phase_10(START, END, selected_tickers, api_key):
         fig_rb.add_trace(go.Scatter(x=roll_beta.index, y=roll_beta.values,
             line=dict(color="#00b4ff", width=1.2), name="Rolling β",
             hovertemplate="β: %{y:.3f}<extra></extra>"), row=1, col=1)
-        fig_rb.add_hline(y=1, line=dict(color="#2a2d3a", dash="dot", width=0.8), row=1, col=1)
+        fig_rb.add_hline(y=1, line=dict(color="var(--qb-border-strong)", dash="dot", width=0.8), row=1, col=1)
         fig_rb.add_hline(y=beta_full, line=dict(color="#f5c518", dash="dot", width=1),
                          annotation_text=f"Full-period β={beta_full:.2f}",
                          annotation_font=dict(color="#f5c518", size=9), row=1, col=1)
@@ -166,13 +166,13 @@ def render_phase_10(START, END, selected_tickers, api_key):
             fill="tozeroy", fillcolor="rgba(0,255,136,0.07)",
             line=dict(color="#00ff88", width=1.2), name="Rolling α (ann.)",
             hovertemplate="α: %{y:.2%}<extra></extra>"), row=2, col=1)
-        fig_rb.add_hline(y=0, line=dict(color="#2a2d3a", width=0.8), row=2, col=1)
+        fig_rb.add_hline(y=0, line=dict(color="var(--qb-border-strong)", width=0.8), row=2, col=1)
         fig_rb.update_layout(**PLOTLY_THEME, height=420,
                              legend=dict(orientation="h", y=1.02, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                              hovermode="x unified")
-        fig_rb.update_yaxes(gridcolor="#161820", title_text="Beta", row=1)
-        fig_rb.update_yaxes(gridcolor="#161820", tickformat=".0%", title_text="Alpha (ann.)", row=2)
-        fig_rb.update_xaxes(gridcolor="#161820")
+        fig_rb.update_yaxes(gridcolor="var(--qb-border)", title_text="Beta", row=1)
+        fig_rb.update_yaxes(gridcolor="var(--qb-border)", tickformat=".0%", title_text="Alpha (ann.)", row=2)
+        fig_rb.update_xaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig_rb, width="stretch")
         chart_caption(ai_insight(
             f"Rolling beta and alpha for {fm_ticker} relative to {benchmark} with a {roll_win}-day window. "
@@ -185,7 +185,7 @@ def render_phase_10(START, END, selected_tickers, api_key):
         st.markdown("<p class='section-label'>Cumulative alpha (returns unexplained by market)</p>", unsafe_allow_html=True)
         fig_resid = go.Figure()
         fig_resid.add_trace(go.Scatter(x=rb_cum.index, y=rb_cum.values,
-            name=benchmark, line=dict(color="#5a6070", width=1.2),
+            name=benchmark, line=dict(color="var(--qb-muted)", width=1.2),
             hovertemplate=f"{benchmark}: $%{{y:.3f}}<extra></extra>"))
         fig_resid.add_trace(go.Scatter(x=ra_cum.index, y=ra_cum.values,
             name=fm_ticker.replace("-USD",""), line=dict(color=TICKER_OPTIONS.get(fm_ticker,"#00b4ff"), width=1.2),
@@ -193,7 +193,7 @@ def render_phase_10(START, END, selected_tickers, api_key):
         fig_resid.add_trace(go.Scatter(x=resid_cum.index, y=resid_cum.values,
             name="Cumulative alpha (residual)", line=dict(color="#00ff88", width=2),
             hovertemplate="Alpha: $%{y:.3f}<extra></extra>"))
-        fig_resid.add_hline(y=1, line=dict(color="#2a2d3a", dash="dot", width=0.8))
+        fig_resid.add_hline(y=1, line=dict(color="var(--qb-border-strong)", dash="dot", width=0.8))
         fig_resid.update_layout(**PLOTLY_THEME, height=360,
                                 legend=dict(orientation="h", y=1.05, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                                 hovermode="x unified", yaxis_title="Growth of $1")
@@ -210,5 +210,3 @@ def render_phase_10(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 11 — STATISTICAL RIGOR
     # ════════════════════════════════════════════════════════════════════════════
-
-

@@ -143,7 +143,7 @@ def render_phase_3(START, END, selected_tickers, api_key):
             hovertemplate="RSI: %{y:.1f}<extra></extra>"), row=1, col=1)
         fig.add_hline(y=oversold_lvl,   line=dict(color="#00ff88", width=0.8, dash="dot"), row=1, col=1)
         fig.add_hline(y=overbought_lvl, line=dict(color="#ff4466", width=0.8, dash="dot"), row=1, col=1)
-        fig.add_hline(y=50,             line=dict(color="#2a2d3a", width=0.6),              row=1, col=1)
+        fig.add_hline(y=50,             line=dict(color="var(--qb-border-strong)", width=0.6),              row=1, col=1)
     
         # RSI bands shading
         fig.add_trace(go.Scatter(
@@ -153,7 +153,7 @@ def render_phase_3(START, END, selected_tickers, api_key):
     
         # Panel 2: Price
         fig.add_trace(go.Scatter(x=prices.index, y=prices.values, name="SPY",
-            line=dict(color="#c8cdd6", width=1),
+            line=dict(color="var(--qb-text)", width=1),
             hovertemplate="%{x|%Y-%m-%d}  $%{y:.2f}<extra></extra>"), row=2, col=1)
         sig_aligned   = signal.reindex(prices.index).fillna(0)
         shade_y_upper = prices.where(sig_aligned == 1)
@@ -163,7 +163,7 @@ def render_phase_3(START, END, selected_tickers, api_key):
     
         # Panel 3: Equity curves
         fig.add_trace(go.Scatter(x=m_bh["cumulative"].index, y=m_bh["cumulative"].values,
-            name="Buy & Hold", line=dict(color="#5a6070", width=1.2),
+            name="Buy & Hold", line=dict(color="var(--qb-muted)", width=1.2),
             hovertemplate="B&H: $%{y:.3f}<extra></extra>"), row=3, col=1)
         fig.add_trace(go.Scatter(x=m_strat["cumulative"].index, y=m_strat["cumulative"].values,
             name="RSI Strategy", line=dict(color="#00b4ff", width=1.5),
@@ -178,11 +178,11 @@ def render_phase_3(START, END, selected_tickers, api_key):
         fig.update_layout(**PLOTLY_THEME, height=720,
                           legend=dict(orientation="h", y=1.02, x=0, font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
                           hovermode="x unified")
-        fig.update_yaxes(gridcolor="#161820", title_text="RSI", row=1)
-        fig.update_yaxes(gridcolor="#161820", title_text="Price", row=2)
-        fig.update_yaxes(gridcolor="#161820", title_text="Growth $1", row=3)
-        fig.update_yaxes(gridcolor="#161820", tickvals=[0, 1], ticktext=["Flat", "Long"], row=4)
-        fig.update_xaxes(gridcolor="#161820")
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="RSI", row=1)
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Price", row=2)
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Growth $1", row=3)
+        fig.update_yaxes(gridcolor="var(--qb-border)", tickvals=[0, 1], ticktext=["Flat", "Long"], row=4)
+        fig.update_xaxes(gridcolor="var(--qb-border)")
         st.plotly_chart(fig, width="stretch")
         chart_caption(ai_insight(
             f"RSI({rsi_period}) mean reversion on {rsi_ticker}. Buy below {oversold_lvl}, sell above {overbought_lvl}. "
@@ -216,7 +216,7 @@ def render_phase_3(START, END, selected_tickers, api_key):
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"""
         <div style='font-family:JetBrains Mono;font-size:0.7rem;color:#3a4050;line-height:2;
-                    border-left:2px solid #1e2030;padding-left:1rem;'>
+                    border-left:2px solid var(--qb-border);padding-left:1rem;'>
         signal: enter long when RSI({rsi_period}) &lt; {oversold_lvl} · exit when RSI &gt; {overbought_lvl} · shifted +1 bar<br>
         trades: {num_trades} · days invested: {days_long}/{total_days} ({days_long/total_days:.0%})<br>
         no transaction costs · no slippage · cash earns 0%
@@ -228,5 +228,3 @@ def render_phase_3(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 4 — TRANSACTION COSTS
     # ════════════════════════════════════════════════════════════════════════════
-
-

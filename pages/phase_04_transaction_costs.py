@@ -147,7 +147,7 @@ def render_phase_4(START, END, selected_tickers, api_key):
         st.markdown("<p class='section-label'>Equity curves — gross vs net of costs</p>", unsafe_allow_html=True)
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=m_bh["cumulative"].index, y=m_bh["cumulative"].values,
-            name="Buy & Hold", line=dict(color="#5a6070", width=1.2, dash="dot"),
+            name="Buy & Hold", line=dict(color="var(--qb-muted)", width=1.2, dash="dot"),
             hovertemplate="B&H: $%{y:.3f}<extra></extra>"))
         fig.add_trace(go.Scatter(x=m_sma_gross["cumulative"].index, y=m_sma_gross["cumulative"].values,
             name="SMA gross", line=dict(color="#00ff88", width=1.2, dash="dash"),
@@ -180,14 +180,14 @@ def render_phase_4(START, END, selected_tickers, api_key):
         strategies = ["Buy & Hold", "SMA gross", "SMA net", "RSI gross", "RSI net"]
         sharpes    = [m_bh["sharpe"], m_sma_gross["sharpe"], m_sma_net["sharpe"],
                       m_rsi_gross["sharpe"], m_rsi_net["sharpe"]]
-        colors     = ["#5a6070", "rgba(0,255,136,0.4)", "#00ff88", "rgba(0,180,255,0.4)", "#00b4ff"]
+        colors     = ["var(--qb-muted)", "rgba(0,255,136,0.4)", "#00ff88", "rgba(0,180,255,0.4)", "#00b4ff"]
         fig2 = go.Figure(go.Bar(x=strategies, y=sharpes, marker_color=colors,
                                 text=[f"{s:.2f}" for s in sharpes], textposition="outside",
                                 hovertemplate="%{x}: %{y:.2f}<extra></extra>"))
-        fig2.add_hline(y=m_bh["sharpe"], line=dict(color="#5a6070", dash="dot", width=1))
+        fig2.add_hline(y=m_bh["sharpe"], line=dict(color="var(--qb-muted)", dash="dot", width=1))
         fig2.update_layout(**PLOTLY_THEME, height=300, showlegend=False,
                            yaxis_title="Sharpe Ratio")
-        fig2.update_yaxes(zeroline=True, zerolinecolor="#2a2d3a")
+        fig2.update_yaxes(zeroline=True, zerolinecolor="var(--qb-border-strong)")
         st.plotly_chart(fig2, width="stretch")
         chart_caption(ai_insight(
             f"Sharpe comparison after transaction costs on {cost_ticker}. "
@@ -202,5 +202,3 @@ def render_phase_4(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 5 — COMBINING SIGNALS
     # ════════════════════════════════════════════════════════════════════════════
-
-

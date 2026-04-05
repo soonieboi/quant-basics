@@ -147,7 +147,7 @@ def render_phase_6(START, END, selected_tickers, api_key):
     
         # IS panel
         fig.add_trace(go.Scatter(x=m_bh_is["cumulative"].index, y=m_bh_is["cumulative"].values,
-            name="B&H (IS)", line=dict(color="#5a6070", width=1.2),
+            name="B&H (IS)", line=dict(color="var(--qb-muted)", width=1.2),
             hovertemplate="B&H: $%{y:.3f}<extra></extra>"), row=1, col=1)
         fig.add_trace(go.Scatter(x=m_best_is["cumulative"].index, y=m_best_is["cumulative"].values,
             name=f"Best SMA {int(best['fast'])}/{int(best['slow'])} (IS)",
@@ -156,7 +156,7 @@ def render_phase_6(START, END, selected_tickers, api_key):
     
         # OOS panel
         fig.add_trace(go.Scatter(x=m_bh_oos["cumulative"].index, y=m_bh_oos["cumulative"].values,
-            name="B&H (OOS)", line=dict(color="#5a6070", width=1.2),
+            name="B&H (OOS)", line=dict(color="var(--qb-muted)", width=1.2),
             hovertemplate="B&H: $%{y:.3f}<extra></extra>"), row=1, col=2)
         fig.add_trace(go.Scatter(x=m_best_oos["cumulative"].index, y=m_best_oos["cumulative"].values,
             name=f"Best params OOS", line=dict(color="#00ff88", width=2),
@@ -168,9 +168,9 @@ def render_phase_6(START, END, selected_tickers, api_key):
         fig.update_layout(**PLOTLY_THEME, height=380,
                           legend=dict(orientation="h", y=1.08, x=0, font=dict(size=9), bgcolor="rgba(0,0,0,0)"),
                           hovermode="x unified")
-        fig.update_yaxes(gridcolor="#161820", title_text="Growth of $1", row=1, col=1)
-        fig.update_yaxes(gridcolor="#161820", title_text="Growth of $1", row=1, col=2)
-        fig.update_xaxes(gridcolor="#161820")
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Growth of $1", row=1, col=1)
+        fig.update_yaxes(gridcolor="var(--qb-border)", title_text="Growth of $1", row=1, col=2)
+        fig.update_xaxes(gridcolor="var(--qb-border)")
         # Add vertical split line annotation
         split_date = str(prices.index[split].date())
         fig.add_vline(x=split_date, line=dict(color="#f5c518", width=1, dash="dash"))
@@ -191,7 +191,7 @@ def render_phase_6(START, END, selected_tickers, api_key):
         pivot = df_grid.pivot(index="slow", columns="fast", values="sharpe_is")
         fig3 = go.Figure(go.Heatmap(
             z=pivot.values, x=[str(c) for c in pivot.columns], y=[str(r) for r in pivot.index],
-            colorscale=[[0, "#ff4466"], [0.5, "#2a2d3a"], [1, "#00ff88"]],
+            colorscale=[[0, "#ff4466"], [0.5, "var(--qb-surface-alt)"], [1, "#00ff88"]],
             text=[[f"{v:.2f}" if not np.isnan(v) else "" for v in row] for row in pivot.values],
             texttemplate="%{text}", hovertemplate="Fast: %{x}  Slow: %{y}<br>Sharpe: %{z:.2f}<extra></extra>",
             colorbar=dict(tickfont=dict(family="JetBrains Mono", size=10)),
@@ -222,5 +222,3 @@ def render_phase_6(START, END, selected_tickers, api_key):
     # ════════════════════════════════════════════════════════════════════════════
     #  PHASE 7 — POSITION SIZING
     # ════════════════════════════════════════════════════════════════════════════
-
-

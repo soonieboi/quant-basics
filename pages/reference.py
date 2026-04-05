@@ -75,7 +75,7 @@ If you can't answer those, you don't yet understand the strategy well enough to 
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"""
-<div style='background:#0d0d14;border:1px solid #1e2030;border-left:3px solid #26c6da;
+<div style='background:var(--qb-surface);border:1px solid var(--qb-border);border-left:3px solid #26c6da;
             border-radius:4px;padding:1.1rem 1.2rem;margin-bottom:1rem;'>
     <div style='font-family:JetBrains Mono;font-size:0.95rem;font-weight:600;color:#e8ecf0;margin-bottom:0.5rem;'>
         {fam_row["Family"]}
@@ -104,7 +104,7 @@ If you can't answer those, you don't yet understand the strategy well enough to 
         hovertemplate="%{x}<br>" + compare_metric + ": %{y}/5<extra></extra>",
     ))
     fig.update_layout(**PLOTLY_THEME, height=340, showlegend=False, yaxis_title=f"{compare_metric} Score")
-    fig.update_yaxes(range=[0, 5.5], dtick=1, gridcolor="#161820")
+    fig.update_yaxes(range=[0, 5.5], dtick=1, gridcolor="var(--qb-border)")
     st.plotly_chart(fig, width="stretch")
     chart_caption(ai_insight(
         f"Compare major quant algorithm families by {compare_metric}. "
@@ -123,7 +123,7 @@ If you can't answer those, you don't yet understand the strategy well enough to 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
     <div style='font-family:JetBrains Mono;font-size:0.7rem;color:#3a4050;line-height:2;
-                border-left:2px solid #1e2030;padding-left:1rem;'>
+                border-left:2px solid var(--qb-border);padding-left:1rem;'>
     rule of thumb: start with trend-following, mean reversion, and factor ideas before touching stat arb or market making<br>
     the lower the holding period, the more execution, data quality, and infrastructure matter<br>
     ML is usually a layer on top of another family, not a separate source of edge by itself
@@ -139,7 +139,7 @@ def render_about_page():
 
     st.markdown("""
 <div class='explainer-box' style='border-left-color:#8a9ab0;'>
-<h4 style='color:#c8cdd6 !important;'>A practical quant learning lab</h4>
+<h4 style='color:var(--qb-text) !important;'>A practical quant learning lab</h4>
 
 I built Quant Basics to make systematic trading easier to learn in a hands-on way.
 Instead of treating quant as a wall of jargon, I wanted one place where I could
@@ -156,7 +156,7 @@ about execution.
     ]
     for title, body in panels:
         st.markdown(f"""
-<div style='background:#0d0d14;border:1px solid #1e2030;border-top:2px solid #8a9ab0;
+<div style='background:var(--qb-surface);border:1px solid var(--qb-border);border-top:2px solid #8a9ab0;
             border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
     <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
                 text-transform:uppercase;color:#3a4050;margin-bottom:0.45rem;'>
@@ -169,7 +169,7 @@ about execution.
 """, unsafe_allow_html=True)
 
     st.markdown("""
-<div style='background:#0d0d14;border:1px solid #2a2230;border-top:2px solid #d7a6ff;
+<div style='background:var(--qb-surface);border:1px solid var(--qb-border);border-top:2px solid #d7a6ff;
             border-radius:4px;padding:1rem 1.1rem;margin:1rem 0;'>
     <div style='font-family:JetBrains Mono;font-size:0.62rem;letter-spacing:0.18em;
                 text-transform:uppercase;color:#5a4f66;margin-bottom:0.45rem;'>
